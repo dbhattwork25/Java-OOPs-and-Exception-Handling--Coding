@@ -1,64 +1,56 @@
-public class Employee {
-    // Private instance variables
-    private int id;
-    private String name;
-    private double salary;
+abstract class Employee {
+    protected String name;
 
-    // Public getter for id
-    public int getId() {
-        return id;
-    }
-
-    // Public setter for id
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    // Public getter for name
-    public String getName() {
-        return name;
-    }
-
-    // Public setter for name
-    public void setName(String name) {
+    public Employee(String name) {
         this.name = name;
     }
 
-    // Public getter for salary
-    public double getSalary() {
-        return salary;
+    public abstract double calculateSalary();
+
+    @Override
+    public String toString() {
+        return this.getClass().getSimpleName() + ": " + name + ", Salary: $" + String.format("%.2f", calculateSalary());
+    }
+}
+
+class Manager extends Employee {
+    private double baseSalary;
+    private double bonus;
+
+    public Manager(String name, double baseSalary, double bonus) {
+        super(name);
+        this.baseSalary = baseSalary;
+        this.bonus = bonus;
     }
 
-    // Public setter for salary with basic validation
-    public void setSalary(double salary) {
-        if (salary > 0) {
-            this.salary = salary;
-        } else {
-            System.out.println("Invalid salary. Salary must be positive.");
-        }
+    @Override
+    public double calculateSalary() {
+        return baseSalary + bonus;
+    }
+}
+
+class Developer extends Employee {
+    private double hourlyRate;
+    private int hoursWorked;
+
+    public Developer(String name, double hourlyRate, int hoursWorked) {
+        super(name);
+        this.hourlyRate = hourlyRate;
+        this.hoursWorked = hoursWorked;
     }
 
-    // Method to display employee details
-    public void printDetails() {
-        System.out.println("Employee ID: " + id);
-        System.out.println("Name: " + name);
-        System.out.println("Salary: ₹" + salary);
-        System.out.println("------------------------");
+    @Override
+    public double calculateSalary() {
+        return hourlyRate * hoursWorked;
     }
+}
 
-    // Main method for testing
+public class Main {
     public static void main(String[] args) {
-        Employee emp = new Employee();
+        Employee manager = new Manager("Alice", 60000, 10000);
+        Employee developer = new Developer("Bob", 50, 160);
 
-        // Setting values using setters
-        emp.setId(1001);
-        emp.setName("Damodar");
-        emp.setSalary(75000.00);
-
-        // Displaying values
-        emp.printDetails();
-
-        // Trying to set invalid salary
-        emp.setSalary(-5000);  // Will show error message
+        System.out.println(manager);
+        System.out.println(developer);
     }
 }
